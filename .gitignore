@@ -4,3 +4,6 @@ data/
 *.html
 *.csv
 log/log.txt
+
+config/db.py
+
