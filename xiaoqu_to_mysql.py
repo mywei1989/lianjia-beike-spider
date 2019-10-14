@@ -12,21 +12,23 @@ import records
 cursor = conn.cursor()
 def insertXiaoquInfo(city,district,area,xiaoqu):
     sql = 'insert into xiaoqu_info(city,district,area,xiaoqu) values(%s,%s,%s,%s)'
-    cursor.execute(sql,[city,district,area,xiaoqu])
+    cursor.execute(sql, [city, district, area, xiaoqu])
     conn.commit()
     lastrowid = cursor.lastrowid
     return lastrowid
 
-def getXiaoquInfoId(city,district,area,xiaoqu):
-    xiaoqu_info_id = xiaoqu_info_dict.get(district+'_'+area+'_'+xiaoqu)
+
+def getXiaoquInfoId(city, district, area, xiaoqu):
+    xiaoqu_info_id = xiaoqu_info_dict.get(district + '_' + area + '_' + xiaoqu)
     if xiaoqu_info_id != None:
         # print([district,area,xiaoqu],'存在')
         return  xiaoqu_info_id
     else:
-        print([district,area,xiaoqu],'不存在,新增')
-        xiaoqu_info_id = insertXiaoquInfo(city,district,area,xiaoqu)
-        xiaoqu_info_dict[district+'_'+area+'_'+xiaoqu] = xiaoqu_info_id
-        return  xiaoqu_info_id
+        print([district, area, xiaoqu], '不存在,新增')
+        xiaoqu_info_id = insertXiaoquInfo(city, district, area, xiaoqu)
+        xiaoqu_info_dict[district + '_' + area + '_' + xiaoqu] = xiaoqu_info_id
+        return xiaoqu_info_id
+
 
 def getXiaoquInfo():
     print('初始化小区数据')
@@ -39,7 +41,9 @@ def getXiaoquInfo():
 
 
 def saveToXiaoquPrice(items):
-    db.bulk_query("insert xiaoqu_price(xiaoqu_info_id, date,city,district,area,xiaoqu,price,sale) values(:xiaoqu_info_id, :date,:city,:district,:area,:xiaoqu,:price,:sale)", items)
+    db.bulk_query(
+        "insert xiaoqu_price(xiaoqu_info_id, date,city,district,area,xiaoqu,price,sale) values(:xiaoqu_info_id, :date,:city,:district,:area,:xiaoqu,:price,:sale)",
+        items)
 
 
 if __name__ == '__main__':
