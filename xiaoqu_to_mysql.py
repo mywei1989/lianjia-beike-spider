@@ -57,8 +57,7 @@ if __name__ == '__main__':
     xiaoqu_price_items = []
 
     city = get_city()
-    #date = get_date_string()
-    date = '20191012'
+    date = get_date_string()
     city_ch = get_chinese_city(city)
     csv_dir = "{0}/{1}/xiaoqu/{2}/{3}".format(DATA_PATH, SPIDER_NAME, city, date)
     files = list()
