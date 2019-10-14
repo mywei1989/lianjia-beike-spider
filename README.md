@@ -124,3 +124,10 @@ Total cost 29.757128953933716 second
 - 2018/03/06 支持北京二手房小区数据采集
 - 2018/02/21 应对链家前端页面更新，使用内置urllib2代替第三方requests库,提升性能，减少依赖
 - 2018/02/01 支持上海二手房小区数据采集
+
+
+
+select price.date,info.district,info.area,info.xiaoqu,price.price,price.sale from xiaoqu_info info
+left join xiaoqu_price price on info.id = price.xiaoqu_info_id
+where info.xiaoqu like '%亚运%'
+order by price.date asc,info.district,info.area,info.xiaoqu
