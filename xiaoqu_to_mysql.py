@@ -41,9 +41,7 @@ def getXiaoquInfo():
 
 
 def saveToXiaoquPrice(items):
-    db.bulk_query(
-        "insert xiaoqu_price(xiaoqu_info_id, date,city,district,area,xiaoqu,price,sale) values(:xiaoqu_info_id, :date,:city,:district,:area,:xiaoqu,:price,:sale)",
-        items)
+    db.bulk_query("insert xiaoqu_price(xiaoqu_info_id, date,city,district,area,xiaoqu,price,sale) values(:xiaoqu_info_id,STR_TO_DATE(:date,'%Y%m%d'),:city,:district,:area,:xiaoqu,:price,:sale)",items)
 
 def start():
     collection = None
@@ -58,7 +56,7 @@ def start():
 
     city = get_city()
     date = get_date_string()
-    #date = '20191013'
+    #date = '20191014'
     city_ch = get_chinese_city(city)
     csv_dir = "{0}/{1}/xiaoqu/{2}/{3}".format(DATA_PATH, SPIDER_NAME, city, date)
     files = list()
