@@ -10,7 +10,7 @@ from config.db import *
 import records
 
 cursor = conn.cursor()
-def insertXiaoquInfo(city,district,area,xiaoqu):
+def insert_xiaoqu_info(city,district,area,xiaoqu):
     sql = 'insert into xiaoqu_info(city,district,area,xiaoqu) values(%s,%s,%s,%s)'
     cursor.execute(sql, [city, district, area, xiaoqu])
     conn.commit()
@@ -18,19 +18,19 @@ def insertXiaoquInfo(city,district,area,xiaoqu):
     return lastrowid
 
 
-def getXiaoquInfoId(city, district, area, xiaoqu):
+def get_xiaoqu_info_id(city, district, area, xiaoqu):
     xiaoqu_info_id = xiaoqu_info_dict.get(district + '_' + area + '_' + xiaoqu)
     if xiaoqu_info_id != None:
         # print([district,area,xiaoqu],'存在')
         return  xiaoqu_info_id
     else:
         print([district, area, xiaoqu], '不存在,新增')
-        xiaoqu_info_id = insertXiaoquInfo(city, district, area, xiaoqu)
+        xiaoqu_info_id = insert_xiaoqu_info(city, district, area, xiaoqu)
         xiaoqu_info_dict[district + '_' + area + '_' + xiaoqu] = xiaoqu_info_id
         return xiaoqu_info_id
 
 
-def getXiaoquInfo():
+def get_xiaoqu_info():
     print('初始化小区数据')
     rows = db.query('select id,district,area,xiaoqu from xiaoqu_info')
     for index,row in enumerate(rows):
@@ -40,7 +40,7 @@ def getXiaoquInfo():
     
 
 
-def saveToXiaoquPrice(items):
+def save_to_xiaoqu_price(items):
     db.bulk_query("insert xiaoqu_price(xiaoqu_info_id, date,city,district,area,xiaoqu,price,sale) values(:xiaoqu_info_id,STR_TO_DATE(:date,'%Y%m%d'),:city,:district,:area,:xiaoqu,:price,:sale)",items)
 
 def start():
@@ -51,7 +51,7 @@ def start():
 
     global xiaoqu_info_dict
     xiaoqu_info_dict = {}
-    getXiaoquInfo()
+    get_xiaoqu_info()
     xiaoqu_price_items = []
 
     city = get_city()
@@ -109,7 +109,7 @@ def start():
                 #print("{0} {1} {2} {3} {4} {5}".format(date, district, area, xiaoqu, price, sale))
                 
 
-                xiaoqu_info_id = getXiaoquInfoId(city,district,area,xiaoqu)
+                xiaoqu_info_id = get_xiaoqu_info_id(city,district,area,xiaoqu)
                 xiaoqu_price_items.append({
                     'xiaoqu_info_id':xiaoqu_info_id,
                     'date':date,
@@ -123,7 +123,7 @@ def start():
                 
         print('[%s,%s,%s]新增了:%s行'%(city_ch,district,area,len(xiaoqu_price_items)))
         if len(xiaoqu_price_items) > 0:
-            saveToXiaoquPrice(xiaoqu_price_items)
+            save_to_xiaoqu_price(xiaoqu_price_items)
 
 
 if __name__ == '__main__':
@@ -134,7 +134,7 @@ if __name__ == '__main__':
     # datas = list()
 
     # xiaoqu_info_dict = {}
-    # getXiaoquInfo()
+    # get_xiaoqu_info()
     # xiaoqu_price_items = []
 
     # city = get_city()
@@ -191,7 +191,7 @@ if __name__ == '__main__':
     #             #print("{0} {1} {2} {3} {4} {5}".format(date, district, area, xiaoqu, price, sale))
                 
 
-    #             xiaoqu_info_id = getXiaoquInfoId(city,district,area,xiaoqu)
+    #             xiaoqu_info_id = get_xiaoqu_info_id(city,district,area,xiaoqu)
     #             xiaoqu_price_items.append({
     #                 'xiaoqu_info_id':xiaoqu_info_id,
     #                 'date':date,
@@ -205,7 +205,7 @@ if __name__ == '__main__':
                 
     #     print('[%s,%s,%s]新增了:%s行'%(city_ch,district,area,len(xiaoqu_price_items)))
     #     if len(xiaoqu_price_items) > 0:
-    #         saveToXiaoquPrice(xiaoqu_price_items)
+    #         save_to_xiaoqu_price(xiaoqu_price_items)
 
 
         
